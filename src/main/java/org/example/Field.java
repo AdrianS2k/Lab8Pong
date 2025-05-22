@@ -47,7 +47,14 @@ public class Field extends JPanel implements PropertyChangeListener {
 
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.BOLD, 24));
+        if (ball.isPaused() && ball.getCountdown() > 0){
+            g.setColor(Color.white);
+            g.setFont(new Font("Arial", Font.BOLD, 64));
 
+            String text = Integer.toString(ball.getCountdown());
+            int textwidth = g.getFontMetrics().stringWidth(text);
+            g.drawString(text, (FIELDWIDTH / 2) - (textwidth/2), FIELDHEIGHT / 10 );
+        }
     }
 
     @Override

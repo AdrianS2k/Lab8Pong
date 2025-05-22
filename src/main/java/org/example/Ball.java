@@ -12,6 +12,9 @@ public class Ball {
     private double dy = 2.0;
     private int SIZE = 10;
 
+    private boolean paused = false;
+    private int countdown = 0;
+
     public Ball(int x, int y){
         this.x = x;
         this.y = y;
@@ -23,30 +26,21 @@ public class Ball {
     }
 
     public void move(){
+        if (paused) return;
         x += (int) dx;
         y += (int) dy;
 
         if (y <= 0 || y >= Field.FIELDHEIGHT - SIZE) dy *= -1;
         if (x < 0){
-            try{
-                Thread.sleep(5000);
-            } catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-            reset();
+            pauseAndReset();
             dx *= -1;
             dx *= 1.1;
         }
         if (x > Field.FIELDWIDTH - SIZE) {
-            try{
-                Thread.sleep(5000);
-            } catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-            reset();
+            pauseAndReset();
             dx *= -1;
+            dx *= 1.1;
+
         }
     }
     public void checkCollision(Bar hostbar, Bar clientbar){
@@ -62,6 +56,29 @@ public class Ball {
         x = Field.FIELDWIDTH / 2 - SIZE / 2;
         y = Field.FIELDHEIGHT / 2 - SIZE / 2;
 
+    }
+    public void pauseAndReset(){
+        paused = true;
+        reset();
+        countdown = 3;
+        new javax.swing.Timer(1000, new java.awt.event.ActionListener(){
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e){
+                countdown --;
+                if (countdown <= 0){
+                    paused = false;
+                    ((javax.swing.Timer) e.getSource()).stop();
+                }
+            }
+        }).start();
+        new javax.swing.Timer(3000, e -> paused = false).start();
+
+    }
+    public int getCountdown(){
+        return countdown;
+    }
+    public boolean isPaused(){
+        return paused;
     }
 
 }
