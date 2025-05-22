@@ -1,37 +1,80 @@
 package org.example;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
+import java.nio.charset.StandardCharsets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
 public class Publisher {
 
-    private final static String BROKER = "tcp://test.mosquitto.org:1883";
-    private final static String TOPIC = "cal-poly/csc/309";
-    private final static String CLIENT_ID = "jgs-publisher";
+    private static final String BROKER      = "tcp://test.mosquitto.org:1883";
+    private static final String ROOT_TOPIC  = "cal-poly/csc/309/pong/room1";
+    private static final String GAME_TOPIC  = ROOT_TOPIC + "/game";
+    private static final String CHAT_TOPIC  = ROOT_TOPIC + "/chat";
+    //private final static String CLIENT_ID = "jgs-publisher";
 
-    public static void main(String[] args) {
+    private final MqttClient client;
+    private final int playerId;
+
+    public Publisher(int playerId) throws MqttException {
+        this.playerId = playerId;
+        this.client = new MqttClient(BROKER, "player-" + playerId + "-pub");
+        client.connect();
+        System.out.println("Publisher connected as player " + playerId);
+    }
+
+    public void sendPaddleMove(int y) throws MqttException {
+        String payload = String.join("|",
+                "PADDLE_MOVE",
+                Integer.toString(playerId),
+                Integer.toString(y)
+        );
+        publish(GAME_TOPIC, payload, 1);
+    }
+
+    public void sendChat(String text) throws MqttException {
+        String payload = String.join("|",
+                "CHAT",
+                Integer.toString(playerId),
+                text.replace("|"," ")
+        );
+        publish(CHAT_TOPIC, payload, 1);
+    }
+
+    private void publish(String topic, String payload, int qos) throws MqttException {
+        MqttMessage m = new MqttMessage(payload.getBytes(StandardCharsets.UTF_8));
+        m.setQos(qos);
+        client.publish(topic, m);
+    }
+
+    public void disconnect() throws MqttException {
+        client.disconnect();
+    }
+
+    public static void main(String[] args) throws Exception {
         try {
-            MqttClient client = new MqttClient(BROKER, CLIENT_ID);
-            client.connect();
-            System.out.println("Connected to BROKER: " + BROKER);
-            int counter = 0;
-            while (true) {
-                String content = "this is message " + counter;
-                MqttMessage message = new MqttMessage(content.getBytes());
-                message.setQos(2);
-                if (client.isConnected())
-                    client.publish(TOPIC, message);
-                counter++;
-                System.out.println("Message published: " + content);
-                Thread.sleep(5000);
+            int player;
+            if (args.length > 0) {
+                player = Integer.parseInt(args[0]);
+            } else {
+                System.out.println("No player ID supplied; defaulting to player-1");
+                player = 1;
             }
+
+            Publisher pub = new Publisher(player);
+
+            //demo loop
+            for (int y = 0; y < 100; y += 25) {
+                pub.sendPaddleMove(y);
+                System.out.printf(">>> sent PADDLE_MOVE|%d|%d%n", player, y);
+                Thread.sleep(300);
+            }
+            pub.sendChat("Ready to play!");
+            System.out.printf(">>> sent CHAT|%d|Ready to play!%n", player);
+
+            pub.disconnect();
         } catch (MqttException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-
 }
