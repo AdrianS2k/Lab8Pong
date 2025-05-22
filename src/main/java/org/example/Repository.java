@@ -10,16 +10,16 @@ import javax.net.ssl.HostnameVerifier;
 public class Repository {
 
     private static Repository instance;
-    private final Player host;
-    private final Player client;
+    private final Player.Host host;
+    private final Player.Client client;
     private int count = 0;
     private final PropertyChangeSupport pcs;
 //    public int hostBarPos = host.getBarPos();
 //    public int clientBarPos = client.getBarPos();
 
     private Repository() {
-        this.host = new Player();
-        this.client = new Player();
+        this.host = new Player.Host();
+        this.client = new Player.Client();
         this.pcs = new PropertyChangeSupport(this);
     }
 
@@ -32,14 +32,16 @@ public class Repository {
     }
 
 
-    public Player getHost(){
+    public Player.Host getHost(){
         return host;
     }
-    public Player getClient(){
+    public Player.Client getClient(){
         return client;
     }
     public void addPropertyChangeListener(PropertyChangeListener listener){
         pcs.addPropertyChangeListener(listener);
+        host.addPropertyChangeListener(listener);
+        client.addPropertyChangeListener(listener);
     }
     public void firePropertyChange(String property, Object oldVal, Object newVal){
         pcs.firePropertyChange(property, oldVal, newVal);

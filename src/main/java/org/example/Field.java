@@ -2,6 +2,7 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -16,11 +17,23 @@ public class Field extends JPanel implements PropertyChangeListener {
     private Player hostPlayer;
     private Player clientPlayer;
 
-    private Font SCOREFONT = new Font("Arial", Font.BOLD, 32);
-    private Font COUNTERFONT = new Font("Arial", Font.BOLD, 64);
+    private final Font SCOREFONT = new Font("Arial", Font.BOLD, 32);
+    private final Font COUNTERFONT = new Font("Arial", Font.BOLD, 64);
+
+    private final int playerId;
+    private final Publisher publisher;
+    private int playerBarY = FIELDHEIGHT / 2;
+
+    private boolean movingUp = false;
+    private boolean movingDown = false;
+    private int lastSentY = -1;
 
 
-    public Field(){
+
+    public Field(int playerID, Publisher publisher){
+        this.playerId = playerID;
+        this.publisher = publisher;
+
         this.ball = new Ball(FIELDWIDTH/2, FIELDHEIGHT/2);
 
         this.hostBar = new Bar(FIELDWIDTH/10, FIELDHEIGHT/2);
@@ -33,13 +46,11 @@ public class Field extends JPanel implements PropertyChangeListener {
         setBackground(Color.GREEN);
         setPreferredSize(new Dimension(FIELDWIDTH, FIELDHEIGHT));
 
-        new Timer(10, e -> {
-            ball.moveAndScore(hostPlayer, clientPlayer);
-            ball.checkCollision(hostBar, clientBar);
-            repaint();
-        }).start();
 
-         Repository.getInstance().addPropertyChangeListener(this);
+        Repository.getInstance().addPropertyChangeListener(this);
+        setFocusable(true);
+        requestFocusInWindow();
+        setupKeyBindings();
 
     }
     @Override
@@ -82,4 +93,70 @@ public class Field extends JPanel implements PropertyChangeListener {
         }
         repaint();
     }
+
+    private void setupKeyBindings() {
+        // Key listener (low-level control)
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                int key = e.getKeyCode();
+                if ((playerId == 1 && key == java.awt.event.KeyEvent.VK_W) ||
+                        (playerId == 2 && key == java.awt.event.KeyEvent.VK_UP)) {
+                    movingUp = true;
+                }
+                if ((playerId == 1 && key == java.awt.event.KeyEvent.VK_S) ||
+                        (playerId == 2 && key == java.awt.event.KeyEvent.VK_DOWN)) {
+                    movingDown = true;
+                }
+            }
+
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                int key = e.getKeyCode();
+                if ((playerId == 1 && key == java.awt.event.KeyEvent.VK_W) ||
+                        (playerId == 2 && key == java.awt.event.KeyEvent.VK_UP)) {
+                    movingUp = false;
+                }
+                if ((playerId == 1 && key == java.awt.event.KeyEvent.VK_S) ||
+                        (playerId == 2 && key == java.awt.event.KeyEvent.VK_DOWN)) {
+                    movingDown = false;
+                }
+            }
+        });
+
+        // Make sure key events are received
+        setFocusable(true);
+        requestFocusInWindow();
+
+        // Game loop: paddle move + ball move + repaint
+        new Timer(10, e -> {
+            if (movingUp) movePaddle(-5);
+            if (movingDown) movePaddle(5);
+
+            ball.moveAndScore(hostPlayer, clientPlayer);
+            ball.checkCollision(hostBar, clientBar);
+            repaint();
+        }).start();
+    }
+
+
+    private void movePaddle(int deltaY) {
+        playerBarY = Math.max(0, Math.min(FIELDHEIGHT - 50, playerBarY + deltaY));
+
+        if (playerBarY != lastSentY) {
+            try {
+                publisher.sendPaddleMove(playerBarY);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            lastSentY = playerBarY;
+        }
+
+        if (playerId == 1) {
+            hostPlayer.setBarPos(playerBarY);
+        } else {
+            clientPlayer.setBarPos(playerBarY);
+        }
+    }
+
 }
