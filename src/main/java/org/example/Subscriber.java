@@ -1,12 +1,15 @@
 package org.example;
 
 import org.eclipse.paho.client.mqttv3.*;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class Subscriber implements MqttCallback {
 
     private static final String BROKER     = "tcp://test.mosquitto.org:1883";
     private static final String ROOT_TOPIC = "cal-poly/csc/309/pong/room1";
     //private final static String CLIENT_ID = "jgs-subscriber";
+    private final List<Consumer<String>> chatListeners = new ArrayList<>();
 
     private final MqttClient client;
 
@@ -16,6 +19,10 @@ public class Subscriber implements MqttCallback {
         client.connect();
         client.subscribe(ROOT_TOPIC + "/#");
         System.out.println("Subscriber listening on " + ROOT_TOPIC + "/#");
+    }
+
+    public void addChatListener(Consumer<String> listener) {
+        chatListeners.add(listener);
     }
 
     public static void main(String[] args) {
@@ -56,6 +63,7 @@ public class Subscriber implements MqttCallback {
 
         switch (type) {
             case "PADDLE_MOVE":
+                //demo
                 int pl = Integer.parseInt(parts[1]);
                 int y  = Integer.parseInt(parts[2]);
                 System.out.printf("Player %d moved paddle to y=%d%n", pl, y);
@@ -67,10 +75,11 @@ public class Subscriber implements MqttCallback {
                 break;
 
             case "CHAT":
+                //demo
                 pl  = Integer.parseInt(parts[1]);
                 String msg = parts[2];
-                System.out.printf("Chat[%d]: %s%n", pl, msg);
-                //display in chat UI
+                String display = "Player " + pl + ": " + msg;
+                chatListeners.forEach(l -> l.accept(display));
                 break;
 
             default:
