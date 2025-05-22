@@ -25,23 +25,27 @@ public class Ball {
         g.fillOval(x, y, SIZE, SIZE);
     }
 
-    public void move(){
-        if (paused) return;
+    public boolean moveAndScore(Player host, Player client){
+        if (paused) return false;
         x += (int) dx;
         y += (int) dy;
 
         if (y <= 0 || y >= Field.FIELDHEIGHT - SIZE) dy *= -1;
         if (x < 0){
+            client.addScore(1);
             pauseAndReset();
             dx *= -1;
             dx *= 1.1;
+            return true;
         }
         if (x > Field.FIELDWIDTH - SIZE) {
+            host.addScore(1);
             pauseAndReset();
             dx *= -1;
             dx *= 1.1;
-
+            return true;
         }
+        return false;
     }
     public void checkCollision(Bar hostbar, Bar clientbar){
         Rectangle ballRect = new Rectangle(x, y , SIZE, SIZE);
@@ -61,7 +65,7 @@ public class Ball {
         paused = true;
         reset();
         countdown = 3;
-        new javax.swing.Timer(1000, new java.awt.event.ActionListener(){
+        new javax.swing.Timer(1500, new java.awt.event.ActionListener(){
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e){
                 countdown --;
@@ -71,7 +75,6 @@ public class Ball {
                 }
             }
         }).start();
-        new javax.swing.Timer(3000, e -> paused = false).start();
 
     }
     public int getCountdown(){

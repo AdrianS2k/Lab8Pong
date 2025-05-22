@@ -13,6 +13,12 @@ public class Field extends JPanel implements PropertyChangeListener {
     private Bar hostBar;
     private Bar clientBar;
 
+    private Player hostPlayer;
+    private Player clientPlayer;
+
+    private Font SCOREFONT = new Font("Arial", Font.BOLD, 32);
+    private Font COUNTERFONT = new Font("Arial", Font.BOLD, 64);
+
 
     public Field(){
         this.ball = new Ball(FIELDWIDTH/2, FIELDHEIGHT/2);
@@ -21,16 +27,19 @@ public class Field extends JPanel implements PropertyChangeListener {
 
         this.clientBar = new Bar(9 * FIELDWIDTH/10, FIELDHEIGHT/2);
 
-        setBackground(Color.GREEN);
+        this.hostPlayer = Repository.getInstance().getHost();
+        this.clientPlayer = Repository.getInstance().getClient();
 
+        setBackground(Color.GREEN);
         setPreferredSize(new Dimension(FIELDWIDTH, FIELDHEIGHT));
+
         new Timer(10, e -> {
-            ball.move();
+            ball.moveAndScore(hostPlayer, clientPlayer);
             ball.checkCollision(hostBar, clientBar);
             repaint();
         }).start();
 
-        // Repository.getInstance().addPropertyChangeListener(this);
+         Repository.getInstance().addPropertyChangeListener(this);
 
     }
     @Override
@@ -40,6 +49,12 @@ public class Field extends JPanel implements PropertyChangeListener {
         g.setColor(Color.GREEN);
         g.fillRect(0, 0, getWidth(), getHeight());
 
+        g.setColor(Color.WHITE);
+        g.setFont(SCOREFONT);
+        String scoreText = String.format("Player 1: %d      Player 2: %d",
+                hostPlayer.getScore(), clientPlayer.getScore());
+        int textWidth = g.getFontMetrics().stringWidth(scoreText);
+        g.drawString(scoreText, (getWidth() - textWidth) /2, 50);
 
         hostBar.draw(g);
         clientBar.draw(g);
@@ -48,8 +63,8 @@ public class Field extends JPanel implements PropertyChangeListener {
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.BOLD, 24));
         if (ball.isPaused() && ball.getCountdown() > 0){
-            g.setColor(Color.white);
-            g.setFont(new Font("Arial", Font.BOLD, 64));
+            g.setColor(Color.BLACK );
+            g.setFont(COUNTERFONT);
 
             String text = Integer.toString(ball.getCountdown());
             int textwidth = g.getFontMetrics().stringWidth(text);
