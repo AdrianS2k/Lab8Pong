@@ -1,22 +1,25 @@
 package org.example;
 
-import org.example.Field;
-import org.example.Publisher;
-import org.example.Subscriber;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 public class Game {
     public static void main(String[] args) throws Exception {
-        int playerId = (args.length > 0) ? Integer.parseInt(args[0]) : 1;
-        Publisher publisher = new Publisher(playerId);
-        Subscriber subscriber = new Subscriber(playerId);
+        int playerId = 2; // Default to host
 
-        JFrame frame = new JFrame("Pong - Player " + playerId);
+        if (args.length > 0) {
+            playerId = Integer.parseInt(args[0]);
+        }
+
+        Publisher pub = new Publisher(playerId);
+        
+        JFrame frame = new JFrame("Pong Test - Player " + playerId);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-
-        Field field = new Field(playerId, publisher);
+        Field field = new Field(playerId, pub);
+        Decorator decoratedField = new Decorator(field);
+        frame.add(decoratedField);
+        
         frame.add(field);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -24,7 +27,7 @@ public class Game {
 
         // Ensure MQTT client disconnects on exit
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try { publisher.disconnect(); } catch (Exception ignored) {}
+            try { pub.disconnect(); } catch (Exception ignored) {}
         }));
     }
 }
