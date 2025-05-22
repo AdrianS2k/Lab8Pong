@@ -16,7 +16,7 @@ public class Repository {
     public int hostBarPos = host.getBarPos();
     public int clientBarPos = client.getBarPos();
     
-    public Repository getInstance() {
+    public static Repository getInstance() {
         if (instance == null) {
             instance = new Repository();
         }
