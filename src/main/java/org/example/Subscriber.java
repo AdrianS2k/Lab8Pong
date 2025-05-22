@@ -59,7 +59,11 @@ public class Subscriber implements MqttCallback {
                 int pl = Integer.parseInt(parts[1]);
                 int y  = Integer.parseInt(parts[2]);
                 System.out.printf("Player %d moved paddle to y=%d%n", pl, y);
-                //feed into game
+                if (pl == 1) {
+                    Repository.getInstance().getHost().setBarPos(y);
+                } else if (pl == 2) {
+                    Repository.getInstance().getClient().setBarPos(y);
+                }
                 break;
 
             case "CHAT":
