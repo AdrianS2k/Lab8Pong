@@ -7,19 +7,28 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class Field extends JPanel implements PropertyChangeListener {
-    public int FIELDSIZE = 500;
-    public int ballLocation = 250;
+    public static final int FIELDHEIGHT = 500;
+    public static final int FIELDWIDTH = 800;
     private Ball ball;
     private Bar hostBar;
     private Bar clientBar;
 
-    public Field(){
-        this.ball = new Ball(150, 150);
-        this.hostBar = new Bar(20, 100);
-        this.clientBar = new Bar(560, 100);
 
-        setPreferredSize(new Dimension(600, 400));
+    public Field(){
+        this.ball = new Ball(FIELDWIDTH/2, FIELDHEIGHT/2);
+
+        this.hostBar = new Bar(FIELDWIDTH/10, FIELDHEIGHT/2);
+
+        this.clientBar = new Bar(9 * FIELDWIDTH/10, FIELDHEIGHT/2);
+
         setBackground(Color.GREEN);
+
+        setPreferredSize(new Dimension(FIELDWIDTH, FIELDHEIGHT));
+        new Timer(10, e -> {
+            ball.move();
+            ball.checkCollision(hostBar, clientBar);
+            repaint();
+        }).start();
 
         // Repository.getInstance().addPropertyChangeListener(this);
 
@@ -27,9 +36,18 @@ public class Field extends JPanel implements PropertyChangeListener {
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+
+        g.setColor(Color.GREEN);
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+
         hostBar.draw(g);
         clientBar.draw(g);
         ball.draw(g);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+
     }
 
     @Override

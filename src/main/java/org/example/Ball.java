@@ -8,8 +8,8 @@ public class Ball {
 
     private int x;
     private int y;
-    private int dx = 3;
-    private int dy = 2;
+    private double dx = 3.0;
+    private double dy = 2.0;
     private int SIZE = 10;
 
     public Ball(int x, int y){
@@ -18,15 +18,36 @@ public class Ball {
     }
 
     public void draw(Graphics g){
-        g.setColor(Color.BLACK);
+        g.setColor(Color.BLUE);
         g.fillOval(x, y, SIZE, SIZE);
     }
 
     public void move(){
-        x += dx;
-        y += dy;
+        x += (int) dx;
+        y += (int) dy;
 
-        if (y <= 0 || y >= 400 - SIZE) dy *= -1;
+        if (y <= 0 || y >= Field.FIELDHEIGHT - SIZE) dy *= -1;
+        if (x < 0){
+            try{
+                Thread.sleep(5000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
+
+            reset();
+            dx *= -1;
+            dx *= 1.1;
+        }
+        if (x > Field.FIELDWIDTH - SIZE) {
+            try{
+                Thread.sleep(5000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
+
+            reset();
+            dx *= -1;
+        }
     }
     public void checkCollision(Bar hostbar, Bar clientbar){
         Rectangle ballRect = new Rectangle(x, y , SIZE, SIZE);
@@ -37,4 +58,10 @@ public class Ball {
             dx *= -1;
         }
     }
+    public void reset(){
+        x = Field.FIELDWIDTH / 2 - SIZE / 2;
+        y = Field.FIELDHEIGHT / 2 - SIZE / 2;
+
+    }
+
 }
