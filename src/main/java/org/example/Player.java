@@ -65,6 +65,10 @@ public class Player {
             this.barPos = barPos;
             pcs.firePropertyChange("HostBarPosition", oldBarPos, barPos);
         }
+        public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+            pcs.addPropertyChangeListener(listener);
+        }
+
     }
 
     public static class Client extends Player {
@@ -80,5 +84,9 @@ public class Player {
             this.barPos = barPos;
             pcs.firePropertyChange("ClientBarPosition", oldBarPos, barPos);
         }
+        public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+            pcs.addPropertyChangeListener(listener);
+        }
+
     }
 }
