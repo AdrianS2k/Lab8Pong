@@ -19,7 +19,12 @@ public class Publisher {
     public Publisher(int playerId) throws MqttException {
         this.playerId = playerId;
         this.client = new MqttClient(BROKER, "player-" + playerId + "-pub");
-        client.connect();
+
+        MqttConnectOptions opts = new MqttConnectOptions();
+        opts.setCleanSession(true);
+        opts.setAutomaticReconnect(true);
+
+        client.connect(opts);
         System.out.println("Publisher connected as player " + playerId);
     }
 
@@ -33,6 +38,9 @@ public class Publisher {
     }
 
     public void sendChat(String text) throws MqttException {
+        if (!client.isConnected()) {
+            client.reconnect();
+        }
         String payload = String.join("|",
                 "CHAT",
                 Integer.toString(playerId),
