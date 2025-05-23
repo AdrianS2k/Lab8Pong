@@ -1,10 +1,18 @@
 package org.example;
 
+/**
+ * Client (Player 2) that brings together Publisher and Subscriber:
+ * connects to the broker, manages callbacks, and provides
+ * sendPaddleMove() / sendChat() for the game logic to call.
+ *
+ * @author Aidan Stutz
+ */
+
 import javax.swing.*;
 
 public class GameClient {
     public static void main(String[] args) throws Exception {
-        int playerId = 2; // Default to host
+        int playerId = 2; //Default to host
 
         if (args.length > 0) {
             playerId = Integer.parseInt(args[0]);
@@ -36,7 +44,6 @@ public class GameClient {
         tabs.addTab("Play", layeredPane);
         tabs.addTab("Chat", chatPanel);
 
-        //frame.setContentPane(layeredPane);
         frame.setContentPane(tabs);
         frame.pack();
         frame.setLocationRelativeTo(null);
