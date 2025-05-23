@@ -6,7 +6,7 @@ import javax.swing.JLayeredPane;
 
 public class Game {
     public static void main(String[] args) throws Exception {
-        int playerId = 1; // Default to host
+        int playerId = 2; // Default to host
 
         if (args.length > 0) {
             playerId = Integer.parseInt(args[0]);
