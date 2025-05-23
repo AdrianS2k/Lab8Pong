@@ -30,6 +30,7 @@ public class Decorator extends JPanel implements PropertyChangeListener {
         // Listen for score changes
         Repository.getInstance().addPropertyChangeListener(this);
         setOpaque(false); // Decorator should be transparent
+        setPreferredSize(field.getPreferredSize());
     }
 
     @Override
