@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  * Decorator class that overlays a celebration when a player reaches a score of 3.
@@ -19,6 +20,7 @@ public class Decorator extends JPanel implements PropertyChangeListener {
     private final Field field;
     private boolean showCelebration = false;
     private String winnerText = "";
+    private Timer celebrationTimer; // Add this
 
     public Decorator(Field field) {
         this.field = field;
@@ -27,14 +29,12 @@ public class Decorator extends JPanel implements PropertyChangeListener {
 
         // Listen for score changes
         Repository.getInstance().addPropertyChangeListener(this);
-        setOpaque(false);
+        setOpaque(false); // Decorator should be transparent
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // Let the field paint itself
-        // (Field is a child component, so it paints automatically)
+    public void paint(Graphics g) {
+        super.paint(g); // Paints children (including Field)
 
         if (showCelebration) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -60,22 +60,36 @@ public class Decorator extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("HostBarPosition".equals(evt.getPropertyName()) || "ClientBarPosition".equals(evt.getPropertyName())) {
-            // Ignore bar position changes
-            return;
-        }
-        Player.Host host = Repository.getInstance().getHost();
-        Player.Client client = Repository.getInstance().getClient();
+        if (showCelebration) return;
 
-        if (host.getScore() >= 3) {
-            showCelebration = true;
-            winnerText = "Player 1 Wins!";
-            repaint();
-        } else if (client.getScore() >= 3) {
-            showCelebration = true;
-            winnerText = "Player 2 Wins!";
-            repaint();
+        if ("HostScore".equals(evt.getPropertyName()) || "ClientScore".equals(evt.getPropertyName())) {
+            Player.Host host = Repository.getInstance().getHost();
+            Player.Client client = Repository.getInstance().getClient();
+
+            if (host.getScore() >= 3) {
+                showCelebration = true;
+                winnerText = "Player 1 Wins!";
+                repaint();
+                startCelebrationTimer();
+            } else if (client.getScore() >= 3) {
+                showCelebration = true;
+                winnerText = "Player 2 Wins!";
+                repaint();
+                startCelebrationTimer();
+            }
         }
+    }
+
+    private void startCelebrationTimer() {
+        if (celebrationTimer != null && celebrationTimer.isRunning()) {
+            celebrationTimer.stop();
+        }
+        celebrationTimer = new Timer(3000, e -> { // 3000 ms = 3 seconds
+            showCelebration = false;
+            repaint();
+        });
+        celebrationTimer.setRepeats(false);
+        celebrationTimer.start();
     }
 
     public boolean isCelebrating() {

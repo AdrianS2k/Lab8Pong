@@ -1,6 +1,8 @@
 package org.example;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class Ball {
 
@@ -30,13 +32,13 @@ public class Ball {
 
         if (y <= 0 || y >= Field.FIELDHEIGHT - SIZE) dy *= -1;
         if (x < 0){
-            client.addScore(1);
+            Repository.getInstance().addClientScore(1);
             pauseAndReset();
             dx = -dx * 1.1;
             return true;
         }
         if (x > Field.FIELDWIDTH - SIZE) {
-            host.addScore(1);
+            Repository.getInstance().addHostScore(1);
             pauseAndReset();
             dx = -dx * 1.1;
             return true;
