@@ -1,5 +1,12 @@
 package org.example;
 
+/**
+ * Publishes paddle movement and chat comms to the MQTT broker under
+ * distinct “/game” and “/chat” topics for a two player Pong match.
+ *
+ * @author Aidan Stutz
+ */
+
 import org.eclipse.paho.client.mqttv3.*;
 import java.nio.charset.StandardCharsets;
 import java.beans.PropertyChangeEvent;
