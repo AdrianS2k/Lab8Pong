@@ -16,7 +16,7 @@ import javax.swing.Timer;
  * Each paddle has a fixed width and height and is rendered as a black rectangle.
  *
  * This class is used for both the host and client player's paddle.
- *
+ * T4b
  * @author Adrian
  * @version 1.0
  */

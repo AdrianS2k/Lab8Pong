@@ -3,12 +3,18 @@ package org.example;
 /**
  * Adds a chat tab to the top of the window, provides a text field
  * and send button for sending new chat messages between players
- *
+ * T4b
  * @author Aidan Stutz
  */
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 public class ChatPanel extends JPanel {

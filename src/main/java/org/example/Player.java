@@ -2,6 +2,15 @@ package org.example;
 
 import java.beans.PropertyChangeSupport;
 
+
+/**
+ * Represents a player in the Pong game, tracking score, paddle position, and chat messages.
+ * This class provides methods for updating and retrieving player state.
+ * It also contains static inner classes for Host and Client players, which support property change listeners for paddle movement.
+ * T4b
+ * @author Marco
+ */
+
 public class Player {
 
     protected int score;

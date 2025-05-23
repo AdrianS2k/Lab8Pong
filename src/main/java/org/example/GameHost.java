@@ -1,8 +1,9 @@
 package org.example;
 
 
-import javax.swing.*;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JTabbedPane;
 /**
  * The {@code GameHost} class is the entry point for launching the host player in the Pong game.
  * It sets up the game window using Java Swing, initializes the MQTT {@code Publisher} and {@code Subscriber},
@@ -13,7 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  * is used to allow decorative overlays (e.g., score-based effects).
  *
  * This class also attaches a shutdown hook to cleanly disconnect the MQTT publisher on exit.
- *
+ * T4b
  * @author Adrian
  * @version 1.0
  */

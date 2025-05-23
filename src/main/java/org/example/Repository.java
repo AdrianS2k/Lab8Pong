@@ -6,6 +6,13 @@ import java.beans.PropertyChangeSupport;
 
 import javax.net.ssl.HostnameVerifier;
 
+/**
+ * Singleton repository for managing game state, including host and client players.
+ * Provides methods for accessing players, updating scores, and firing property change events
+ * to notify listeners of state changes (such as score or paddle position updates).
+ * T4b
+ * @author Marco
+ */
 
 public class Repository {
 

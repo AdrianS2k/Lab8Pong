@@ -4,11 +4,13 @@ package org.example;
  * Client (Player 2) that brings together Publisher and Subscriber:
  * connects to the broker, manages callbacks, and provides
  * sendPaddleMove() / sendChat() for the game logic to call.
- *
+ * T4b
  * @author Aidan Stutz
  */
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JTabbedPane;
 
 public class GameClient {
     public static void main(String[] args) throws Exception {
