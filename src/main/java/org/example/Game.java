@@ -1,42 +1,30 @@
 package org.example;
 
+import org.example.Field;
+import org.example.Publisher;
+import org.example.Subscriber;
 
 import javax.swing.*;
 
 public class Game {
     public static void main(String[] args) throws Exception {
-        int playerId = 1; // Default to host
+        int playerId = (args.length > 0) ? Integer.parseInt(args[0]) : 1;
+        Publisher publisher = new Publisher(playerId);
+        Subscriber subscriber = new Subscriber(playerId);
 
-        if (args.length > 0) {
-            playerId = Integer.parseInt(args[0]);
-        }
-
-        Publisher pub = new Publisher(playerId);
-
-        JFrame frame = new JFrame("Pong Test - Player " + playerId);
+        JFrame frame = new JFrame("Pong - Player " + playerId);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        Field field = new Field(playerId, pub);
-        Decorator decoratedField = new Decorator(field);
-
-        // Use a JLayeredPane for overlay
-        JLayeredPane layeredPane = new JLayeredPane();
-        field.setBounds(0, 0, Field.FIELDWIDTH, Field.FIELDHEIGHT);
-        decoratedField.setBounds(0, 0, Field.FIELDWIDTH, Field.FIELDHEIGHT);
-
-        layeredPane.setPreferredSize(new java.awt.Dimension(Field.FIELDWIDTH, Field.FIELDHEIGHT));
-        layeredPane.add(field, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(decoratedField, JLayeredPane.PALETTE_LAYER);
-
-        frame.setContentPane(layeredPane);
+        Field field = new Field(playerId, publisher);
+        frame.add(field);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         // Ensure MQTT client disconnects on exit
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try { pub.disconnect(); } catch (Exception ignored) {}
+            try { publisher.disconnect(); } catch (Exception ignored) {}
         }));
     }
 }
