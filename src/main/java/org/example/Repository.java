@@ -59,4 +59,14 @@ public class Repository {
         client.addScore(points);
         pcs.firePropertyChange("ClientScore", oldScore, client.getScore());
     }
+
+    public void setScores(int newHostScore, int newClientScore) {
+        int oldH = host.getScore();
+        host.score = newHostScore;
+        pcs.firePropertyChange("HostScore", oldH, newHostScore);
+
+        int oldC = client.getScore();
+        client.score = newClientScore;
+        pcs.firePropertyChange("ClientScore", oldC, newClientScore);
+    }
 }

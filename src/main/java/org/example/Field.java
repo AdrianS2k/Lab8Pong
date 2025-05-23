@@ -32,6 +32,9 @@ public class Field extends JPanel implements PropertyChangeListener {
     private boolean movingDown = false;
     private int lastSentY = -1;
 
+    private int lastHostScore;
+    private int lastClientScore;
+
     public Field(int playerId, Publisher publisher) {
         this.playerId = playerId;
         this.publisher = publisher;
@@ -42,6 +45,9 @@ public class Field extends JPanel implements PropertyChangeListener {
 
         this.hostPlayer = Repository.getInstance().getHost();
         this.clientPlayer = Repository.getInstance().getClient();
+
+        this.lastHostScore   = hostPlayer.getScore();
+        this.lastClientScore = clientPlayer.getScore();
 
         setBackground(Color.GREEN);
         setPreferredSize(new Dimension(FIELDWIDTH, FIELDHEIGHT));
@@ -104,6 +110,20 @@ public class Field extends JPanel implements PropertyChangeListener {
             if (movingDown) movePaddle(5);
             ball.moveAndScore(hostPlayer, clientPlayer);
             ball.checkCollision(hostBar, clientBar);
+
+            if (playerId == 1) {
+                int currH = hostPlayer.getScore();
+                int currC = clientPlayer.getScore();
+                if (currH != lastHostScore || currC != lastClientScore) {
+                    try {
+                        publisher.sendScore(currH, currC);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    lastHostScore   = currH;
+                    lastClientScore = currC;
+                }
+            }
             repaint();
         }).start();
     }

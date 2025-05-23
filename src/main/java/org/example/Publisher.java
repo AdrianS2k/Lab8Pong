@@ -49,6 +49,15 @@ public class Publisher {
         publish(CHAT_TOPIC, payload, 1);
     }
 
+    public void sendScore(int hostScore, int clientScore) throws MqttException {
+        String payload = String.join("|",
+                "SCORE",
+                Integer.toString(hostScore),
+                Integer.toString(clientScore)
+        );
+        publish(GAME_TOPIC, payload, 1);
+    }
+
     private void publish(String topic, String payload, int qos) throws MqttException {
         MqttMessage m = new MqttMessage(payload.getBytes(StandardCharsets.UTF_8));
         m.setQos(qos);

@@ -63,7 +63,6 @@ public class Subscriber implements MqttCallback {
 
         switch (type) {
             case "PADDLE_MOVE":
-                //demo
                 int pl = Integer.parseInt(parts[1]);
                 int y  = Integer.parseInt(parts[2]);
                 System.out.printf("Player %d moved paddle to y=%d%n", pl, y);
@@ -75,11 +74,16 @@ public class Subscriber implements MqttCallback {
                 break;
 
             case "CHAT":
-                //demo
                 pl  = Integer.parseInt(parts[1]);
                 String msg = parts[2];
                 String display = "Player " + pl + ": " + msg;
                 chatListeners.forEach(l -> l.accept(display));
+                break;
+
+            case "SCORE":
+                int h = Integer.parseInt(parts[1]);
+                int c = Integer.parseInt(parts[2]);
+                Repository.getInstance().setScores(h, c);
                 break;
 
             default:
