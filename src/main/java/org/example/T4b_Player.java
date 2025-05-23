@@ -11,14 +11,14 @@ import java.beans.PropertyChangeSupport;
  * @author Marco
  */
 
-public class Player {
+public class T4b_Player {
 
     protected int score;
     protected int barPos;
     protected String chatMessageIn;
     protected String chatMessageOut;
 
-    public Player() {
+    public T4b_Player() {
         reset();
     }
 
@@ -61,7 +61,7 @@ public class Player {
         this.chatMessageOut = "";
     }
 
-    public static class Host extends Player {
+    public static class Host extends T4b_Player {
         private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
         public Host() {
@@ -80,7 +80,7 @@ public class Player {
 
     }
 
-    public static class Client extends Player {
+    public static class Client extends T4b_Player {
         private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
         public Client() {

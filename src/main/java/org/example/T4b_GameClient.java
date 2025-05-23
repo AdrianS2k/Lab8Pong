@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JTabbedPane;
 
-public class GameClient {
+public class T4b_GameClient {
     public static void main(String[] args) throws Exception {
         int playerId = 2; //Default to host
 
@@ -20,25 +20,25 @@ public class GameClient {
             playerId = Integer.parseInt(args[0]);
         }
 
-        Publisher pub = new Publisher(playerId);
-        Subscriber sub = new Subscriber(playerId);
+        T4b_Publisher pub = new T4b_Publisher(playerId);
+        T4b_Subscriber sub = new T4b_Subscriber(playerId);
 
         JFrame frame = new JFrame("Pong Test - Player " + playerId);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        Field field = new Field(playerId, pub);
-        Decorator decoratedField = new Decorator(field);
+        T4b_Field field = new T4b_Field(playerId, pub);
+        T4b_Decorator decoratedField = new T4b_Decorator(field);
 
-        ChatPanel chatPanel = new ChatPanel(pub);
+        T4b_ChatPanel chatPanel = new T4b_ChatPanel(pub);
         sub.addChatListener(chatPanel::appendMessage);
 
         // Use a JLayeredPane for overlay
         JLayeredPane layeredPane = new JLayeredPane();
-        field.setBounds(0, 0, Field.FIELDWIDTH, Field.FIELDHEIGHT);
-        decoratedField.setBounds(0, 0, Field.FIELDWIDTH, Field.FIELDHEIGHT);
+        field.setBounds(0, 0, T4b_Field.FIELDWIDTH, T4b_Field.FIELDHEIGHT);
+        decoratedField.setBounds(0, 0, T4b_Field.FIELDWIDTH, T4b_Field.FIELDHEIGHT);
 
-        layeredPane.setPreferredSize(new java.awt.Dimension(Field.FIELDWIDTH, Field.FIELDHEIGHT));
+        layeredPane.setPreferredSize(new java.awt.Dimension(T4b_Field.FIELDWIDTH, T4b_Field.FIELDHEIGHT));
         layeredPane.add(field, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(decoratedField, JLayeredPane.PALETTE_LAYER);
 

@@ -14,7 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class Publisher {
+public class T4b_Publisher {
 
     private static final String BROKER      = "tcp://test.mosquitto.org:1883";
     private static final String ROOT_TOPIC  = "cal-poly/csc/309/pong/room1";
@@ -25,7 +25,7 @@ public class Publisher {
     private final MqttClient client;
     private final int playerId;
 
-    public Publisher(int playerId) throws MqttException {
+    public T4b_Publisher(int playerId) throws MqttException {
         this.playerId = playerId;
         this.client = new MqttClient(BROKER, "player-" + playerId + "-pub");
 
@@ -87,7 +87,7 @@ public class Publisher {
                 player = 1;
             }
 
-            Publisher pub = new Publisher(player);
+            T4b_Publisher pub = new T4b_Publisher(player);
 
             //demo loop
             for (int y = 0; y < 100; y += 25) {

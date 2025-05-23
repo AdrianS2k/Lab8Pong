@@ -21,19 +21,19 @@ import javax.swing.Timer;
  * @author Marco
  */
 
-public class Decorator extends JPanel implements PropertyChangeListener {
-    private final Field field;
+public class T4b_Decorator extends JPanel implements PropertyChangeListener {
+    private final T4b_Field field;
     private boolean showCelebration = false;
     private String winnerText = "";
     private Timer celebrationTimer; // Add this
 
-    public Decorator(Field field) {
+    public T4b_Decorator(T4b_Field field) {
         this.field = field;
         setLayout(new BorderLayout());
         add(field, BorderLayout.CENTER);
 
         // Listen for score changes
-        Repository.getInstance().addPropertyChangeListener(this);
+        T4b_Repository.getInstance().addPropertyChangeListener(this);
         setOpaque(false); // Decorator should be transparent
         setPreferredSize(field.getPreferredSize());
     }
@@ -69,8 +69,8 @@ public class Decorator extends JPanel implements PropertyChangeListener {
         if (showCelebration) return;
 
         if ("HostScore".equals(evt.getPropertyName()) || "ClientScore".equals(evt.getPropertyName())) {
-            Player.Host host = Repository.getInstance().getHost();
-            Player.Client client = Repository.getInstance().getClient();
+            T4b_Player.Host host = T4b_Repository.getInstance().getHost();
+            T4b_Player.Client client = T4b_Repository.getInstance().getClient();
 
             if (host.getScore() == 3 && client.getScore() < 3) {
                 showCelebration = true;

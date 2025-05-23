@@ -1,6 +1,7 @@
 package org.example;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 /**
  * The {@code Bar} class represents a paddle in the Pong game.
  * It defines the paddle's position and provides methods for drawing and updating its location.
@@ -11,14 +12,14 @@ import java.awt.*;
  * @author Adrian
  * @version 1.0
  */
-public class Bar {
+public class T4b_Bar {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 50;
 
     private int x;
     private int y;
 
-    public Bar(int x, int y){ this.x = x; this.y = y; }
+    public T4b_Bar(int x, int y){ this.x = x; this.y = y; }
 
     public void draw(Graphics g){
         g.setColor(Color.BLACK);
@@ -29,3 +30,4 @@ public class Bar {
     public int getY(){ return y; }
     public int getX(){ return x; }
 }
+

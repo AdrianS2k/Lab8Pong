@@ -20,21 +20,21 @@ import javax.swing.Timer;
  * @author Adrian
  * @version 1.0
  */
-public class Field extends JPanel implements PropertyChangeListener {
+public class T4b_Field extends JPanel implements PropertyChangeListener {
     public static final int FIELDHEIGHT = 500;
     public static final int FIELDWIDTH = 800;
 
-    private final Ball ball;
-    private final Bar hostBar;
-    private final Bar clientBar;
-    private final Player hostPlayer;
-    private final Player clientPlayer;
+    private final T4b_Ball ball;
+    private final T4b_Bar hostBar;
+    private final T4b_Bar clientBar;
+    private final T4b_Player hostPlayer;
+    private final T4b_Player clientPlayer;
 
     private final Font scoreFont = new Font("Arial", Font.BOLD, 32);
     private final Font counterFont = new Font("Arial", Font.BOLD, 64);
 
     private final int playerId;
-    private final Publisher publisher;
+    private final T4b_Publisher publisher;
     private int playerBarY = FIELDHEIGHT / 2;
 
     private boolean movingUp = false;
@@ -44,23 +44,23 @@ public class Field extends JPanel implements PropertyChangeListener {
     private int lastHostScore;
     private int lastClientScore;
 
-    public Field(int playerId, Publisher publisher) {
+    public T4b_Field(int playerId, T4b_Publisher publisher) {
         this.playerId = playerId;
         this.publisher = publisher;
 
-        this.ball = new Ball(FIELDWIDTH / 2, FIELDHEIGHT / 2);
-        this.hostBar = new Bar(FIELDWIDTH / 10, FIELDHEIGHT / 2);
-        this.clientBar = new Bar(9 * FIELDWIDTH / 10, FIELDHEIGHT / 2);
+        this.ball = new T4b_Ball(FIELDWIDTH / 2, FIELDHEIGHT / 2);
+        this.hostBar = new T4b_Bar(FIELDWIDTH / 10, FIELDHEIGHT / 2);
+        this.clientBar = new T4b_Bar(9 * FIELDWIDTH / 10, FIELDHEIGHT / 2);
 
-        this.hostPlayer = Repository.getInstance().getHost();
-        this.clientPlayer = Repository.getInstance().getClient();
+        this.hostPlayer = T4b_Repository.getInstance().getHost();
+        this.clientPlayer = T4b_Repository.getInstance().getClient();
 
         this.lastHostScore   = hostPlayer.getScore();
         this.lastClientScore = clientPlayer.getScore();
 
         setBackground(Color.GREEN);
         setPreferredSize(new Dimension(FIELDWIDTH, FIELDHEIGHT));
-        Repository.getInstance().addPropertyChangeListener(this);
+        T4b_Repository.getInstance().addPropertyChangeListener(this);
 
         setFocusable(true);
         requestFocusInWindow();
@@ -138,7 +138,7 @@ public class Field extends JPanel implements PropertyChangeListener {
     }
 
     private void movePaddle(int deltaY) {
-        playerBarY = Math.max(0, Math.min(FIELDHEIGHT - Bar.HEIGHT, playerBarY + deltaY));
+        playerBarY = Math.max(0, Math.min(FIELDHEIGHT - T4b_Bar.HEIGHT, playerBarY + deltaY));
 
         if (playerBarY != lastSentY) {
             try { publisher.sendPaddleMove(playerBarY); } catch (Exception ignored) {}

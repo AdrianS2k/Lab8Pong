@@ -11,7 +11,7 @@ import java.awt.Rectangle;
  * @author Adrian
  * @version 1.0
  */
-public class Ball {
+public class T4b_Ball {
 
     private double x;
     private double y;
@@ -22,7 +22,7 @@ public class Ball {
     private boolean paused = false;
     private int countdown = 0;
 
-    public Ball(int x, int y){
+    public T4b_Ball(int x, int y){
         this.x = x;
         this.y = y;
     }
@@ -32,20 +32,20 @@ public class Ball {
         g.fillOval((int)x, (int)y, SIZE, SIZE);
     }
 
-    public boolean moveAndScore(Player host, Player client){
+    public boolean moveAndScore(T4b_Player host, T4b_Player client){
         if (paused) return false;
         x += dx;
         y += dy;
 
-        if (y <= 0 || y >= Field.FIELDHEIGHT - SIZE) dy *= -1;
+        if (y <= 0 || y >= T4b_Field.FIELDHEIGHT - SIZE) dy *= -1;
         if (x < 0){
-            Repository.getInstance().addClientScore(1);
+            T4b_Repository.getInstance().addClientScore(1);
             pauseAndReset();
             dx = -dx * 1.1;
             return true;
         }
-        if (x > Field.FIELDWIDTH - SIZE) {
-            Repository.getInstance().addHostScore(1);
+        if (x > T4b_Field.FIELDWIDTH - SIZE) {
+            T4b_Repository.getInstance().addHostScore(1);
             pauseAndReset();
             dx = -dx * 1.1;
             return true;
@@ -53,10 +53,10 @@ public class Ball {
         return false;
     }
 
-    public void checkCollision(Bar hostBar, Bar clientBar){
+    public void checkCollision(T4b_Bar hostBar, T4b_Bar clientBar){
         Rectangle ballRect = new Rectangle((int)x, (int)y, SIZE, SIZE);
-        Rectangle hostRect = new Rectangle(hostBar.getX(), hostBar.getY(), Bar.WIDTH, Bar.HEIGHT);
-        Rectangle clientRect = new Rectangle(clientBar.getX(), clientBar.getY(), Bar.WIDTH, Bar.HEIGHT);
+        Rectangle hostRect = new Rectangle(hostBar.getX(), hostBar.getY(), T4b_Bar.WIDTH, T4b_Bar.HEIGHT);
+        Rectangle clientRect = new Rectangle(clientBar.getX(), clientBar.getY(), T4b_Bar.WIDTH, T4b_Bar.HEIGHT);
 
         if (ballRect.intersects(hostRect) || ballRect.intersects(clientRect)) {
             dx *= -1;
@@ -64,8 +64,8 @@ public class Ball {
     }
 
     public void reset(){
-        x = (Field.FIELDWIDTH - SIZE) / 2;
-        y = (Field.FIELDHEIGHT - SIZE) / 2;
+        x = (T4b_Field.FIELDWIDTH - SIZE) / 2;
+        y = (T4b_Field.FIELDHEIGHT - SIZE) / 2;
     }
 
     public void pauseAndReset(){

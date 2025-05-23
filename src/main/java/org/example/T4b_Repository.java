@@ -4,8 +4,6 @@ package org.example;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import javax.net.ssl.HostnameVerifier;
-
 /**
  * Singleton repository for managing game state, including host and client players.
  * Provides methods for accessing players, updating scores, and firing property change events
@@ -14,35 +12,35 @@ import javax.net.ssl.HostnameVerifier;
  * @author Marco
  */
 
-public class Repository {
+public class T4b_Repository {
 
-    private static Repository instance;
-    private final Player.Host host;
-    private final Player.Client client;
+    private static T4b_Repository instance;
+    private final T4b_Player.Host host;
+    private final T4b_Player.Client client;
     private int count = 0;
     private final PropertyChangeSupport pcs;
 //    public int hostBarPos = host.getBarPos();
 //    public int clientBarPos = client.getBarPos();
 
-    private Repository() {
-        this.host = new Player.Host();
-        this.client = new Player.Client();
+    private T4b_Repository() {
+        this.host = new T4b_Player.Host();
+        this.client = new T4b_Player.Client();
         this.pcs = new PropertyChangeSupport(this);
     }
 
 
-    public static Repository getInstance() {
+    public static T4b_Repository getInstance() {
         if (instance == null) {
-            instance = new Repository();
+            instance = new T4b_Repository();
         }
         return instance;
     }
 
 
-    public Player.Host getHost(){
+    public T4b_Player.Host getHost(){
         return host;
     }
-    public Player.Client getClient(){
+    public T4b_Player.Client getClient(){
         return client;
     }
     public void addPropertyChangeListener(PropertyChangeListener listener){

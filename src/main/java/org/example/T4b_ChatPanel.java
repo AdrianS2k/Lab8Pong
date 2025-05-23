@@ -17,12 +17,12 @@ import javax.swing.JTextField;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class ChatPanel extends JPanel {
+public class T4b_ChatPanel extends JPanel {
     private final JTextArea chatArea = new JTextArea();
     private final JTextField inputField = new JTextField();
-    private final Publisher publisher;
+    private final T4b_Publisher publisher;
 
-    public ChatPanel(Publisher publisher) {
+    public T4b_ChatPanel(T4b_Publisher publisher) {
         this.publisher = publisher;
         setLayout(new BorderLayout());
 

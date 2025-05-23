@@ -3,15 +3,21 @@ package org.example;
 /**
  * Subscribes to all Pong room MQTT topics (“/game” & “/chat”),
  * and parses each payload and has cases for each event.
- *
+ * T4b
  * @author Aidan Stutz
  */
 
-import org.eclipse.paho.client.mqttv3.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class Subscriber implements MqttCallback {
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+public class T4b_Subscriber implements MqttCallback {
 
     private static final String BROKER     = "tcp://test.mosquitto.org:1883";
     private static final String ROOT_TOPIC = "cal-poly/csc/309/pong/room1";
@@ -19,7 +25,7 @@ public class Subscriber implements MqttCallback {
 
     private final MqttClient client;
 
-    public Subscriber(int playerId) throws MqttException {
+    public T4b_Subscriber(int playerId) throws MqttException {
         client = new MqttClient(BROKER, "player-" + playerId + "-sub");
         client.setCallback(this);
         client.connect();
@@ -42,7 +48,7 @@ public class Subscriber implements MqttCallback {
                 player = 1;
             }
 
-            new Subscriber(player);
+            new T4b_Subscriber(player);
 
         } catch (MqttException e) {
             e.printStackTrace();
@@ -66,9 +72,9 @@ public class Subscriber implements MqttCallback {
                 int y  = Integer.parseInt(parts[2]);
                 System.out.printf("Player %d moved paddle to y=%d%n", pl, y);
                 if (pl == 1) {
-                    Repository.getInstance().getHost().setBarPos(y);
+                    T4b_Repository.getInstance().getHost().setBarPos(y);
                 } else if (pl == 2) {
-                    Repository.getInstance().getClient().setBarPos(y);
+                    T4b_Repository.getInstance().getClient().setBarPos(y);
                 }
                 break;
 
@@ -82,7 +88,7 @@ public class Subscriber implements MqttCallback {
             case "SCORE":
                 int h = Integer.parseInt(parts[1]);
                 int c = Integer.parseInt(parts[2]);
-                Repository.getInstance().setScores(h, c);
+                T4b_Repository.getInstance().setScores(h, c);
                 break;
 
             default:
