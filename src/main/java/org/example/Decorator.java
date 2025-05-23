@@ -1,5 +1,6 @@
 package org.example;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -13,9 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
- * Decorator class that overlays a celebration when a player reaches a score of 3.
- * Wraps a Field and listens for score changes.
+ * Decorator class that overlays a celebration message when a player reaches a score of 3.
+ * This class wraps a {@link Field} and listens for score changes via property change events.
+ * When a player reaches a score of 3, a celebration overlay is displayed for a few seconds.
+ * T4b
+ * @author Marco
  */
+
 public class Decorator extends JPanel implements PropertyChangeListener {
     private final Field field;
     private boolean showCelebration = false;
