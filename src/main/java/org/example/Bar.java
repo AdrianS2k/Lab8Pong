@@ -1,7 +1,16 @@
 package org.example;
 
 import java.awt.*;
-
+/**
+ * The {@code Bar} class represents a paddle in the Pong game.
+ * It defines the paddle's position and provides methods for drawing and updating its location.
+ * Each paddle has a fixed width and height and is rendered as a black rectangle.
+ *
+ * This class is used for both the host and client player's paddle.
+ *
+ * @author Adrian
+ * @version 1.0
+ */
 public class Bar {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 50;

@@ -10,7 +10,16 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
+/**
+ * The {@code Bar} class represents a paddle in the Pong game.
+ * It defines the paddle's position and provides methods for drawing and updating its location.
+ * Each paddle has a fixed width and height and is rendered as a black rectangle.
+ *
+ * This class is used for both the host and client player's paddle.
+ *
+ * @author Adrian
+ * @version 1.0
+ */
 public class Field extends JPanel implements PropertyChangeListener {
     public static final int FIELDHEIGHT = 500;
     public static final int FIELDWIDTH = 800;

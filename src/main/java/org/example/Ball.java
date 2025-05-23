@@ -4,6 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+/**
+ * The {@code Ball} class represents the ball used in the Pong game.
+ * It handles movement, collision detection, scoring, and visual rendering of the ball.
+ *
+ * @author Adrian
+ * @version 1.0
+ */
 public class Ball {
 
     private double x;
