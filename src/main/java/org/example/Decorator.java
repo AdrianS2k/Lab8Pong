@@ -66,12 +66,12 @@ public class Decorator extends JPanel implements PropertyChangeListener {
             Player.Host host = Repository.getInstance().getHost();
             Player.Client client = Repository.getInstance().getClient();
 
-            if (host.getScore() >= 3) {
+            if (host.getScore() == 3 && client.getScore() < 3) {
                 showCelebration = true;
                 winnerText = "Player 1 Wins!";
                 repaint();
                 startCelebrationTimer();
-            } else if (client.getScore() >= 3) {
+            } else if (client.getScore() == 3 && host.getScore() < 3) {
                 showCelebration = true;
                 winnerText = "Player 2 Wins!";
                 repaint();
