@@ -1,5 +1,12 @@
 package org.example;
 
+/**
+ * Subscribes to all Pong room MQTT topics (“/game” & “/chat”),
+ * and parses each payload and has cases for each event.
+ *
+ * @author Aidan Stutz
+ */
+
 import org.eclipse.paho.client.mqttv3.*;
 import java.util.*;
 import java.util.function.Consumer;
@@ -8,7 +15,6 @@ public class Subscriber implements MqttCallback {
 
     private static final String BROKER     = "tcp://test.mosquitto.org:1883";
     private static final String ROOT_TOPIC = "cal-poly/csc/309/pong/room1";
-    //private final static String CLIENT_ID = "jgs-subscriber";
     private final List<Consumer<String>> chatListeners = new ArrayList<>();
 
     private final MqttClient client;
@@ -27,13 +33,6 @@ public class Subscriber implements MqttCallback {
 
     public static void main(String[] args) {
         try {
-//            MqttClient client = new MqttClient(BROKER, CLIENT_ID);
-//            Subscriber subscriber = new Subscriber();
-//            client.setCallback(subscriber);
-//            client.connect();
-//            System.out.println("Connected to BROKER: " + BROKER);
-//            client.subscribe(TOPIC);
-//            System.out.println("Subscribed to TOPIC: " + TOPIC);
             int player;
             if (args.length > 0) {
                 player = Integer.parseInt(args[0]);
@@ -92,7 +91,6 @@ public class Subscriber implements MqttCallback {
     }
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        //System.out.println("Delivered complete: " + iMqttDeliveryToken.getMessageId());
     }
 
 }
