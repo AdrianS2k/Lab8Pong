@@ -1,10 +1,15 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Field extends JPanel implements PropertyChangeListener {
     public static final int FIELDHEIGHT = 500;
@@ -45,11 +50,13 @@ public class Field extends JPanel implements PropertyChangeListener {
         setFocusable(true);
         requestFocusInWindow();
         setupKeyBindings();
+        setOpaque(true);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
         hostBar.draw(g);
         clientBar.draw(g);
         ball.draw(g);

@@ -48,5 +48,15 @@ public class Repository {
     }
     // public Player getPlayer1() { return player1; }
     // public Player getPlayer2() { return player2; }
-    
+    public void addHostScore(int points) {
+        int oldScore = host.getScore();
+        host.addScore(points);
+        pcs.firePropertyChange("HostScore", oldScore, host.getScore());
+    }
+
+    public void addClientScore(int points) {
+        int oldScore = client.getScore();
+        client.addScore(points);
+        pcs.firePropertyChange("ClientScore", oldScore, client.getScore());
+    }
 }

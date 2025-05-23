@@ -8,7 +8,6 @@ import javax.swing.*;
 
 public class Game {
     public static void main(String[] args) throws Exception {
-        System.out.println(args);
         int playerId = (args.length > 0) ? Integer.parseInt(args[0]) : 1;
         Publisher publisher = new Publisher(playerId);
         Subscriber subscriber = new Subscriber(playerId);
