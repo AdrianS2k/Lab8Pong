@@ -1,5 +1,12 @@
 package org.example;
 
+/**
+ * Adds a chat tab to the top of the window, provides a text field
+ * and send button for sending new chat messages between players
+ *
+ * @author Aidan Stutz
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -29,7 +36,6 @@ public class ChatPanel extends JPanel {
         if (text.isEmpty()) return;
         try {
             publisher.sendChat(text);
-            //appendMessage("Me: " + text);
             inputField.setText("");
         } catch (MqttException ex) {
             ex.printStackTrace();
